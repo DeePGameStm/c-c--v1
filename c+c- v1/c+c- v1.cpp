@@ -15,11 +15,11 @@ using namespace std;
 
 int main()
 {
-	std::string neuronBase = "0:0#0!0|0:1#0!0|0:2#0!0|0:3#0!0|0:4#0!0|";
+	std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0:0!0|";
 	vector<IA> genom;
 
 	Game game;
-	game.init(0, 100, 10);
+	game.init(0, 100, 100);
 	while (1)
 	{
 
