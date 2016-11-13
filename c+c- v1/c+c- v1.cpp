@@ -1,5 +1,5 @@
 // c+c- v1.cpp : Defines the entry point for the console application.
-//
+//yop
 
 #include "stdafx.h"
 #include <Windows.h>
