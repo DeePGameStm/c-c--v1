@@ -39,7 +39,7 @@ IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0
 			modeNeuron = atoi(msg.c_str());
 			msg = "";
 			mode = 2;
-			neuronsLs[nbCol].push_back(Neurons(modeNeuron, nbCol, nbNeuron));
+			neuronsLs[nbCol].push_back(Neurons(modeNeuron, nbCol, nbNeuron, &neuronsLs));
 			break;
 		case 2:
 			while (params[nbChar] != '|')
