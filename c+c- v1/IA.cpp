@@ -2,7 +2,7 @@
 #include "IA.h"
 
 
-IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0:0!0|";
+IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0:0!0|1:10!0";
 {
 	bool end = false;
 	unsigned int nbChar = 2;
@@ -27,7 +27,7 @@ IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0
 			nbCol = atoi(msg.c_str());
 			nbChar++;
 			msg = "";
-            mode = 1;
+			mode = 1;
 			break;
 		case 1:
 			while (params[nbChar] != '!')
@@ -41,6 +41,8 @@ IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0
 			msg = "";
 			mode = 2;
 			neuronsLs[nbCol].push_back(Neurons(modeNeuron, nbCol, nbNeuron, &neuronsLs));
+			if (modeNeuron == 10)
+				neuronsLs[nbCol][nbNeuron].outIntP = &outInt;
 			break;
 		case 2:
 			while (params[nbChar] != '|')
@@ -81,7 +83,7 @@ std::string IA::returnADN()
 		ss << ':';
 		for (unsigned int y(0); y < neuronsLs[i].size(); y++)
 		{
-			ss << y;
+			ss << neuronsLs[i][y].mode;
 			ss << '!';
 			for (unsigned int z(0); z < neuronsLs[i][y].liaisons.size(); z++)
 			{
@@ -94,6 +96,48 @@ std::string IA::returnADN()
 	}
 	msg = ss.str();
 	return msg;
+}
+
+void IA::mutate()
+{
+	srand(time(NULL));
+	for (unsigned int i(0); i < neuronsLs.size() - 1; i++)
+	{
+		for (unsigned int y(0); y < neuronsLs[i].size(); y++)
+		{
+			if ((rand() % 1000) == 1)
+			{
+				neuronsLs[i][y].mode = rand() % maxMode;
+				if ((rand() % 100) == 1)
+				{
+					if ((rand() % 2) == 0) //make liaison
+					{
+						if (neuronsLs[i][y].liaisons.size() < neuronsLs[i + 1].size())
+						{
+							int varRandLiaison = 0;
+							bool exist = false;
+							do {
+								varRandLiaison = rand() % neuronsLs[i + 1].size();
+								for (unsigned int z(0); z < neuronsLs[i][y].liaisons.size(); z++)
+									if (varRandLiaison == neuronsLs[i][y].liaisons[z])
+										exist = true;
+							} while (exist);
+							neuronsLs[i][y].liaisons.push_back(varRandLiaison);
+						}
+					}
+					else //break liaison
+					{
+
+					}
+				}
+			}
+		}
+	}
+}
+
+void IA::output()
+{
+
 }
 
 IA::~IA()

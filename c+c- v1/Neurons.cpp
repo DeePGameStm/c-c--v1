@@ -96,8 +96,11 @@ void Neurons::activate() //0 = addition, 1 = multiplication, 2 = division, 3 = s
 		break;
 	}
 
-	for (unsigned int i(0); i < liaisons.size(); i++)
-		(*pointerLs)[colonne + 1][liaisons[i]].inputs.push_back(value);
+	if (mode != 10)
+		for (unsigned int i(0); i < liaisons.size(); i++)
+			(*pointerLs)[colonne + 1][liaisons[i]].inputs.push_back(value);
+	else
+		*outIntP = value;
 }
 
 Neurons::~Neurons()

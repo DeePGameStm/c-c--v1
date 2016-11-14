@@ -20,6 +20,7 @@ public:
 	int colonne;
 	int id;
 	int memory;
+	int *outIntP;
 
 	~Neurons();
 };

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cstdlib>
+#include <time.h>
 
 class IA
 {
@@ -14,9 +16,15 @@ public:
 	void update();
 
 	std::string returnADN();
+	void mutate();
+
+	void output();
+
+	int outInt = -1;
 
 	~IA();
 
 	std::vector<std::vector<Neurons>> neuronsLs;
+	int maxMode = 9;
 };
 
