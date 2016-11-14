@@ -27,35 +27,53 @@ void Neurons::breakLiaison(int nbNeuron)
 	liaisons = replace;
 }
 
-void Neurons::activate() //0 = addition, 1 = multiplication, 2 = division, 3 = soustraction, 4 = AND, 5 = OR, 6 = NON, 7 = CONST, 8 = MEM 
+void Neurons::activate() //0 = addition, 1 = multiplication, 2 = division, 3 = soustraction, 4 = &&, 5 = ||, 6 = !, 7 = CONST, 8 = MEM 
 {
 	int value = 0;
 	switch (mode)
 	{
-	case 0:
+	case 0: //+
 		for (unsigned int i(0); i < inputs.size(); i++)
 			value += inputs[i];
 		inputs.clear();
 		break;
-     case 1:
+     case 1: //x
         value = inputs[0];
         for (unsigned int i(1); i < inputs.size(); i++)
 			value *= inputs[i];
 		inputs.clear();
      break;
-     case 2:
+     case 2:// /
      value = inputs[0];
         for (unsigned int i(1); i < inputs.size(); i++)
 			value /= inputs[i];
 		inputs.clear();
      break;
-     case 3:
+     case 3://-
      value = inputs[0];
         for (unsigned int i(1); i < inputs.size(); i++)
 			value -= inputs[i];
 		inputs.clear();
      break;
-
+	 case 4: //&&
+		 value = 1;
+		 for (unsigned int i(0); i < inputs.size() - 1; i++)
+			 if (inputs[i] != inputs[i + 1])
+				 value = 0;
+		 break;
+	 case 5: //||
+		 for (unsigned int i(0); i < inputs.size(); i++)
+			 if (inputs[i] > 0)
+				 value = 1;
+		 break;
+	 case 6: //!
+		 for(unsigned int i(0); i < inputs.size(); i++)
+			 value += inputs[i];
+		 if (value > 0)
+			 value = 0;
+		 else
+			 value = 1;
+		 break;
 	default:
 		break;
 	}
