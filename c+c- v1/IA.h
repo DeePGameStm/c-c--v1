@@ -5,12 +5,15 @@
 #include "Neurons.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 class IA
 {
 public:
 	IA(std::string params);
 	void update();
+
+	std::string returnADN();
 
 	~IA();
 

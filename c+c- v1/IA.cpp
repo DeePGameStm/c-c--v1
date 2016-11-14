@@ -71,6 +71,31 @@ void IA::update()
 
 }
 
+std::string IA::returnADN()
+{
+	std::string msg = "";
+	std::stringstream ss;
+	for (unsigned int i(0); i < neuronsLs.size(); i++)
+	{
+		ss << i;
+		ss << ':';
+		for (unsigned int y(0); y < neuronsLs[i].size(); y++)
+		{
+			ss << y;
+			ss << '!';
+			for (unsigned int z(0); z < neuronsLs[i][y].liaisons.size(); z++)
+			{
+				ss << neuronsLs[i][y].liaisons[z];
+				if ((z + 1) < neuronsLs[i][y].liaisons.size())
+					ss << ',';
+			}
+		}
+		ss << '|';
+	}
+	msg = ss.str();
+	return msg;
+}
+
 IA::~IA()
 {
 }
