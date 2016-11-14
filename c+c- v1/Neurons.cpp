@@ -60,11 +60,13 @@ void Neurons::activate() //0 = addition, 1 = multiplication, 2 = division, 3 = s
 		 for (unsigned int i(0); i < inputs.size() - 1; i++)
 			 if (inputs[i] != inputs[i + 1])
 				 value = 0;
+		 inputs.clear();
 		 break;
 	 case 5: //||
 		 for (unsigned int i(0); i < inputs.size(); i++)
 			 if (inputs[i] > 0)
 				 value = 1;
+		 inputs.clear();
 		 break;
 	 case 6: //!
 		 for(unsigned int i(0); i < inputs.size(); i++)
@@ -73,6 +75,22 @@ void Neurons::activate() //0 = addition, 1 = multiplication, 2 = division, 3 = s
 			 value = 0;
 		 else
 			 value = 1;
+		 inputs.clear();
+		 break;
+	 case 7: //CONST
+		 if (inputs.size() > 0)
+			 value = inputs[0];
+		 else
+			 value = 0;
+		 break;
+	 case 8: //MEM
+		 if (inputs.size() > 0)
+		 {
+			 memory = inputs[inputs.size() - 1];
+			 inputs.clear();
+			 inputs.push_back(memory);
+		 }
+		 value = memory;
 		 break;
 	default:
 		break;

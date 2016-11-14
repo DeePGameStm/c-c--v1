@@ -19,6 +19,7 @@ public:
 	int mode;
 	int colonne;
 	int id;
+	int memory;
 
 	~Neurons();
 };
