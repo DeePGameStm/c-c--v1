@@ -37,6 +37,24 @@ void Neurons::activate() //0 = addition, 1 = multiplication, 2 = division, 3 = s
 			value += inputs[i];
 		inputs.clear();
 		break;
+     case 1:
+        value = inputs[0];
+        for (unsigned int i(1); i < inputs.size(); i++)
+			value *= inputs[i];
+		inputs.clear();
+     break;
+     case 2:
+     value = inputs[0];
+        for (unsigned int i(1); i < inputs.size(); i++)
+			value /= inputs[i];
+		inputs.clear();
+     break;
+     case 3:
+     value = inputs[0];
+        for (unsigned int i(1); i < inputs.size(); i++)
+			value -= inputs[i];
+		inputs.clear();
+     break;
 
 	default:
 		break;
