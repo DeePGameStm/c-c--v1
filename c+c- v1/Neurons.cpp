@@ -27,7 +27,7 @@ void Neurons::breakLiaison(int nbNeuron)
 	liaisons = replace;
 }
 
-void Neurons::activate() //0 = addition, 1 = multiplication, 2 = division, 3 = soustraction, 4 = &&, 5 = ||, 6 = !, 7 = CONST, 8 = MEM 
+void Neurons::activate() //0 = addition, 1 = multiplication, 2 = division, 3 = soustraction, 4 = &&, 5 = ||, 6 = !, 7 = CONST, 8 = MEM
 {
 	int value = 0;
 	switch (mode)
