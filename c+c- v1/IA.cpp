@@ -27,6 +27,7 @@ IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0
 			nbCol = atoi(msg.c_str());
 			nbChar++;
 			msg = "";
+            mode = 1;
 			break;
 		case 1:
 			while (params[nbChar] != '!')
