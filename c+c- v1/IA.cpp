@@ -81,8 +81,12 @@ IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0
 
 void IA::update()
 {
+	for (unsigned int i(0); i < neuronsLs.size(); i++)
+		for (unsigned int y(0); y < neuronsLs[i].size(); y++)
+			neuronsLs[i][y].activate();
 
-}
+	output();
+};
 
 std::string IA::returnADN()
 {
