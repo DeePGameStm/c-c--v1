@@ -21,9 +21,15 @@ int main()
 
 	Game game;
 	game.init(0, 100, 100);
+	string baseAdn = test.returnADN();
+	while (!test.mutate());
+	{
+	}
+	string mutateAdn = test.returnADN();
+	cout << "ADN:        " << baseAdn << endl;
+	cout << "mutate ADN: " << mutateAdn << endl;
 
-	cout << "ADN: " << test.returnADN() << endl;
-
+	cout << "DONE!" << endl;
 	system("PAUSE");
     return 0;
 }

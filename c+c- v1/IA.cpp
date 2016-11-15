@@ -5,7 +5,7 @@
 IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0:0!0|1:10!0|";
 {
 	bool end = false;
-	unsigned int nbChar = 2;
+	unsigned int nbChar = 0;
 	int nbCol;
 	std::vector<int> nbColVec;
 	bool littleExist = false;
@@ -76,7 +76,7 @@ IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0
 			break;
 		}
 	}
-	std::cout << "neu0: " << neuronsLs[0].size() << std::endl;
+	//	std::cout << "neu0: " << neuronsLs[0].size() << std::endl;
 }
 
 void IA::update()
@@ -90,10 +90,10 @@ std::string IA::returnADN()
 	std::stringstream ss;
 	for (unsigned int i(0); i < neuronsLs.size(); i++)
 	{
-		ss << i;
-		ss << ':';
 		for (unsigned int y(0); y < neuronsLs[i].size(); y++)
 		{
+			ss << i;
+			ss << ':';
 			ss << neuronsLs[i][y].mode;
 			ss << '!';
 			for (unsigned int z(0); z < neuronsLs[i][y].liaisons.size(); z++)
@@ -102,21 +102,22 @@ std::string IA::returnADN()
 				if ((z + 1) < neuronsLs[i][y].liaisons.size())
 					ss << ',';
 			}
+			ss << '|';
 		}
-		ss << '|';
 	}
 	msg = ss.str();
 	return msg;
 }
 
-void IA::mutate()
+bool IA::mutate()
 {
+	bool ret = false;
 	srand(time(NULL));
 	for (unsigned int i(0); i < neuronsLs.size() - 1; i++)
 	{
 		for (unsigned int y(0); y < neuronsLs[i].size(); y++)
 		{
-			if ((rand() % 1000) == 1)
+			if ((rand() % 100) == 1)
 			{
 				neuronsLs[i][y].mode = rand() % maxMode;
 				if ((rand() % 100) == 1) //liaison
@@ -134,16 +135,23 @@ void IA::mutate()
 										exist = true;
 							} while (exist);
 							neuronsLs[i][y].makeLiaison(varRandLiaison);
+							ret = true;
 						}
 					}
 					else //break liaison
 					{
-						neuronsLs[i][y].breakLiaison(rand() % neuronsLs[i][y].liaisons.size());
+						if (neuronsLs[i][y].liaisons.size() > 0)
+						{
+							neuronsLs[i][y].breakLiaison(rand() % neuronsLs[i][y].liaisons.size()); 
+							ret = true;
+						}
+
 					}
 				}
-				if ((rand() % 10) == 1) //changement mode
+				if ((rand() % 10) == 1 || 1 == 1) //changement mode
 				{
 					neuronsLs[i][y].mode = rand() % maxMode;
+					ret = true;
 				}
 			}
 		}
@@ -158,16 +166,20 @@ void IA::mutate()
 				{
 					replace.push_back(replaceChild);
 					replace[i2 + 1].push_back(Neurons(rand() % maxMode, i2 + 1, 0, &neuronsLs));
+					replace[i2 + 1][0].makeLiaison(0);
 				}
 			}
 			neuronsLs.clear();
 			neuronsLs = replace;
+			ret = true;
 		}
 		if ((rand() % 100) == 1) //addNeuron
 		{
 			neuronsLs[i].push_back(Neurons(rand() % maxMode, i, neuronsLs[i].size(), &neuronsLs));
+			ret = true;
 		}
 	}
+	return ret;
 }
 
 void IA::output()

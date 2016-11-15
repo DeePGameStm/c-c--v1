@@ -16,7 +16,7 @@ public:
 	void update();
 
 	std::string returnADN();
-	void mutate();
+	bool mutate();
 
 	void output();
 
