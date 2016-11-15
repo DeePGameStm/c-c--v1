@@ -1,4 +1,8 @@
 #pragma once
+
+#include <cstdlib>
+#include <time.h>
+
 class Game
 {
 public:
@@ -8,9 +12,12 @@ public:
 
 	~Game();
 
+	int play(int input);
+
 	bool work = false;
 	int nbMin;
 	int nbMax;
 	int nbTour;
+	int nbF;
 };
 
