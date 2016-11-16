@@ -49,7 +49,9 @@ IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0
 			modeNeuron = atoi(msg.c_str());
 			msg = "";
 			mode = 2;
-			neuronsLs[nbCol].push_back(Neurons(modeNeuron, nbCol, nbColVec[nbCol], &neuronsLs));
+			neuronsLs[nbCol].push_back(Neurons(modeNeuron, nbCol, nbColVec[nbCol]/*, &neuronsLs*/));
+			//neuronsLs[nbCol][neuronsLs[nbCol].size() - 1].pointerLs = &neuronsLs;
+			//std::cout << "pointerLs size: " << neuronsLs[nbCol][neuronsLs[nbCol].size() - 1].pointerLs->size() << std::endl;
 			if (modeNeuron == 10)
 				neuronsLs[nbCol][nbColVec[nbCol]].outIntP = &outInt;
 			nbColVec[nbCol]++;
@@ -81,9 +83,17 @@ IA::IA(std::string params) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0
 
 void IA::update()
 {
+	//std::cout << "neuronLs size: " << neuronsLs.size() << std::endl;
+	//std::cout << "pointerLs size: " << neuronsLs[0][0].pointerLs->size() << std::endl;
+	input1 = gameP->PM;
+	for (unsigned int i(0); i < neuronsLs[0].size(); i++)
+		neuronsLs[0][i].inputs.push_back(input1);
+
 	for (unsigned int i(0); i < neuronsLs.size(); i++)
 		for (unsigned int y(0); y < neuronsLs[i].size(); y++)
-			neuronsLs[i][y].activate();
+		{
+			neuronsLs[i][y].activate(&neuronsLs);
+		}
 
 	output();
 };
@@ -124,9 +134,9 @@ bool IA::mutate()
 			if ((rand() % 100) == 1)
 			{
 				neuronsLs[i][y].mode = rand() % maxMode;
-				if ((rand() % 100) == 1) //liaison
+				if ((rand() % 2) == 1) //liaison
 				{
-					if ((rand() % 2) == 0) //make liaison
+					if ((rand() % 2) == 1) //make liaison
 					{
 						if (neuronsLs[i][y].liaisons.size() < neuronsLs[i + 1].size())
 						{
@@ -144,9 +154,9 @@ bool IA::mutate()
 					}
 					else //break liaison
 					{
-						if (neuronsLs[i][y].liaisons.size() > 0)
+						if (neuronsLs[i][y].liaisons.size() > 1)
 						{
-							neuronsLs[i][y].breakLiaison(rand() % neuronsLs[i][y].liaisons.size()); 
+							neuronsLs[i][y].breakLiaison(rand() % neuronsLs[i][y].liaisons.size());
 							ret = true;
 						}
 
@@ -169,7 +179,7 @@ bool IA::mutate()
 				if (i2 == i)
 				{
 					replace.push_back(replaceChild);
-					replace[i2 + 1].push_back(Neurons(rand() % maxMode, i2 + 1, 0, &neuronsLs));
+					replace[i2 + 1].push_back(Neurons(rand() % maxMode, i2 + 1, 0/*, &neuronsLs*/));
 					replace[i2 + 1][0].makeLiaison(0);
 				}
 			}
@@ -179,7 +189,8 @@ bool IA::mutate()
 		}
 		if ((rand() % 100) == 1) //addNeuron
 		{
-			neuronsLs[i].push_back(Neurons(rand() % maxMode, i, neuronsLs[i].size(), &neuronsLs));
+			neuronsLs[i].push_back(Neurons(rand() % maxMode, i, neuronsLs[i].size()/*, &neuronsLs*/));
+			neuronsLs[i][neuronsLs[i].size() - 1].makeLiaison(0);
 			ret = true;
 		}
 	}
@@ -188,7 +199,62 @@ bool IA::mutate()
 
 void IA::output()
 {
+	gameP->play(outInt);
+}
 
+std::string IA::fusion(std::string genom1, std::string genom2) //std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0:0!0|1:10!0|";
+{
+	std::string result = "";
+	std::string extract1 = "";
+	std::string extract2 = "";
+	int nbChar1 = 0;
+	int nbChar2 = 0;
+	srand(time(NULL));
+	if (genom2.size() > genom1.size()) //genom1 doit etre la plus grande
+		genom2.swap(genom1);
+
+	while (1)
+	{
+		while (genom1[nbChar1] != '|')
+		{
+			extract1 += genom1[nbChar1];
+			nbChar1++;
+		}
+		extract1 += '|';
+		nbChar1++;
+		if (nbChar2 + 1 < genom2.size())
+		{
+			while (genom2[nbChar2] != '|')
+			{
+				extract2 += genom2[nbChar2];
+				nbChar2++;
+			}
+			nbChar2++;
+			extract2 += '|';
+
+		}
+		else
+			extract2 = extract1;
+		if (extract1.find(":10|") == std::string::npos && extract2.find(":10|") == std::string::npos)
+		{
+			if (rand() % 2 == 0)
+				result += extract1;
+			else
+				result += extract2;
+		}
+		else if (extract2.find(":10|") != std::string::npos)
+		{
+			result += extract1;
+		}
+		extract1 = "";
+		extract2 = "";
+
+
+		if (nbChar1 + 1 >= genom1.size())
+			break;
+	}
+	//std::cout << "result: " << result << std::endl;
+	return result;
 }
 
 IA::~IA()

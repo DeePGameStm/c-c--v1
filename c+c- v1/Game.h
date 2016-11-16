@@ -12,12 +12,13 @@ public:
 
 	~Game();
 
-	int play(int input);
+	void play(int input);
 
 	bool work = false;
 	int nbMin;
 	int nbMax;
 	int nbTour;
 	int nbF;
+	int PM = 0;
 };
 

@@ -8,6 +8,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <time.h>
+#include "Game.h"
 
 class IA
 {
@@ -21,6 +22,12 @@ public:
 	void output();
 
 	int outInt = -1;
+	int input1 = 0;
+
+	Game *gameP;
+	int score;
+
+	std::string fusion(std::string genom1, std::string genom2);
 
 	~IA();
 

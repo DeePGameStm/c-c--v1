@@ -13,9 +13,24 @@ void Game::init(int nbMinF, int nbMaxF, int nbTourF)
 	nbF = (rand() % nbMax) + nbMin;
 }
 
-int Game::play(int input)
+void Game::play(int input)
 {
+	if (nbTour > 0)
+	{
+		if (input < nbF)
+			PM = 2;
+		else if (input > nbF)
+			PM = 1;
 
+		if (input == nbF)
+		{
+			work = false;
+		}
+		else
+			nbTour--;
+	}
+	else
+		work = false;
 }
 
 Game::~Game()
