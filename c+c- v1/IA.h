@@ -20,9 +20,12 @@ public:
 	bool mutate();
 
 	void output();
+	int numFindStr(std::string str0, std::string strF);
+
 
 	int outInt = -1;
 	int input1 = 0;
+	int nbOutput = 1; //une seul sortie pour play
 
 	Game *gameP;
 	int score;

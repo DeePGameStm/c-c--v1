@@ -27,7 +27,7 @@ void Neurons::breakLiaison(int nbNeuron)
 	liaisons = replace;
 }
 
-void Neurons::activate(std::vector<std::vector<Neurons>> *pointerLs2) //0 = addition, 1 = multiplication, 2 = division, 3 = soustraction, 4 = &&, 5 = ||, 6 = !, 7 = CONST, 8 = MEM
+void Neurons::activate(std::vector<std::vector<Neurons>> *pointerLs2, int *outIntP) //0 = addition, 1 = multiplication, 2 = division, 3 = soustraction, 4 = &&, 5 = ||, 6 = !, 7 = CONST, 8 = MEM
 {
 	int value = 0;
 	switch (mode)
@@ -124,8 +124,12 @@ void Neurons::activate(std::vector<std::vector<Neurons>> *pointerLs2) //0 = addi
 	if (mode != 10)
 		for (unsigned int i(0); i < liaisons.size(); i++)
 			(*pointerLs2)[colonne + 1][liaisons[i]].inputs.push_back(value);
-	else
+	else {
+		for (unsigned int i(0); i < inputs.size(); i++)
+			value += inputs[i];
+		inputs.clear();
 		*outIntP = value;
+	}
 }
 
 Neurons::~Neurons()

@@ -6,11 +6,17 @@ Game::Game()
 {
 }
 
-void Game::init(int nbMinF, int nbMaxF, int nbTourF)
+void Game::init(int nbMinF, int nbMaxF, int nbTourF, int manual)
 {
 	nbMin = nbMinF; nbMax = nbMaxF; nbTour = nbTourF; work = true;
-	srand(time(NULL));
-	nbF = (rand() % nbMax) + nbMin;
+	if (manual == -1)
+	{
+		nbF = (rand() % nbMax) + nbMin;
+	}
+	else
+		nbF = manual;
+
+	//std::cout << "nbF= " << nbF << std::endl;
 }
 
 void Game::play(int input)

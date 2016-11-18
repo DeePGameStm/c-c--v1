@@ -15,9 +15,25 @@
 
 using namespace std;
 
+void toClipboard(const string s) {
+	OpenClipboard(0);
+	EmptyClipboard();
+	HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, s.size());
+	if (!hg) {
+		CloseClipboard();
+		return;
+	}
+	memcpy(GlobalLock(hg), s.c_str(), s.size());
+	GlobalUnlock(hg);
+	SetClipboardData(CF_TEXT, hg);
+	CloseClipboard();
+	GlobalFree(hg);
+}
+
 int main()
 {
-	std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0:0!0|1:10!0|";
+	srand(time(NULL));
+	std::string neuronBase = "0:0!0|0:0!0|0:0!0|0:0!0|0:0!0|1:10!0|"; // 0:0!0|0:0!0|0:0!0|0:0!0|0:0!0|1:10!0|
 	IA Lia(neuronBase);
 	vector<IA> genom;
 	vector<int> score;
@@ -41,7 +57,7 @@ int main()
 		cin >> scoreMax;
 		if (scoreMax == -1)
 			break;
-		game.init(0, 101, 50);
+		game.init(0, 1001, 50, 42);
 		nbG = 0;
 		while(1)
 		{
@@ -60,7 +76,8 @@ int main()
 				{
 					_getch();
 					cout << "KBHIT: " << endl << "GENERATION: " << nbG << endl << "ADN: " << generations[generations.size() - 1].returnADN() << endl;
-					Sleep(3000);
+					//Sleep(3000);
+					toClipboard(generations[generations.size() - 1].returnADN());
 					cout << "..." << endl;
 				}
 				if (game.work)
@@ -71,7 +88,7 @@ int main()
 				else
 				{
 					score[score.size() - 1] = game.nbTour;
-					if (genom.size() > 99)
+					if (genom.size() > 29)
 					{
 						scoreTemp1 = -1; scoreTemp2 = -1;
 						for (unsigned int i(0); i < score.size(); i++)
@@ -84,6 +101,7 @@ int main()
 						}
 						if (scoreTemp1 > scoreMax)
 						{
+							Beep(1000, 1000);
 							cout << "wow; score: " << scoreTemp1 << endl << "ADN: " << genom[scoreTemp1Case].returnADN() << endl << endl;
 							wow = true;
 						}
@@ -97,17 +115,20 @@ int main()
 						}
 						if (scoreTemp2 > scoreMax)
 						{
+							Beep(1000, 1000);
 							cout << "wow; score: " << scoreTemp2 << endl << "ADN: " << genom[scoreTemp2Case].returnADN() << endl << endl;
 							wow = true;
 						}
 
 						//fusion
+						//cout << "fusion!" << endl;
 						generations.clear();
 						generations.push_back( IA ( Lia.fusion(genom[scoreTemp1Case].returnADN(), genom[scoreTemp2Case].returnADN() ) ) );
 						nbG++;
 						//cout << "0" << endl;
 						genom.clear();
 						score.clear();
+						game.init(0, 1001, 50, 42);
 						if (wow)
 						{
 							cout << "fusion ADN: " << generations[generations.size() - 1].returnADN() << endl;
